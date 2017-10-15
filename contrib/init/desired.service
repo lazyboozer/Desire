@@ -1,0 +1,22 @@
+[Unit]
+Description=Desire's distributed currency daemon
+After=network.target
+
+[Service]
+User=desirecore
+Group=desirecore
+
+Type=forking
+PIDFile=/var/lib/desired/desired.pid
+ExecStart=/usr/bin/desired -daemon -pid=/var/lib/desired/desired.pid \
+-conf=/etc/desirecore/desire.conf -datadir=/var/lib/desired -disablewallet
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target

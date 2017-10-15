@@ -1,0 +1,6 @@
+usr/local/bin/desire-qt usr/bin
+share/pixmaps/desire32.xpm usr/share/pixmaps
+share/pixmaps/desire16.xpm usr/share/pixmaps
+share/pixmaps/desire128.png usr/share/pixmaps
+debian/desire-qt.desktop usr/share/applications
+debian/desire-qt.protocol usr/share/kde4/services/

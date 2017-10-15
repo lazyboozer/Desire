@@ -1,0 +1,12 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Desire
+Comment=Desire P2P Cryptocurrency
+Comment[fr]=Desire, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Desire, eşten eşe kriptografik sanal para birimi
+Exec=desire-qt %u
+Terminal=false
+Type=Application
+Icon=desire128
+MimeType=x-scheme-handler/desire;
+Categories=Office;Finance;
