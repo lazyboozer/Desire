@@ -1,9 +1,9 @@
-Desire Core staging tree 0.12.1
+Desire Core staging tree 0.12.1.5
 ===============================
 
 
 
-https://bitcointalk.org/index.php?topic=2198958.0
+https://bitcointalk.org/index.php?topic=2272607.0
 
 
 What is Desire?
@@ -16,7 +16,7 @@ are carried out collectively by the network. Desire Core is the name of the open
 source software which enables the use of this currency.
 
 For more information, as well as an immediately useable, binary version of
-the Desire Core software, see https://bitcointalk.org/index.php?topic=2198958.0.
+the Desire Core software, see https://bitcointalk.org/index.php?topic=2272607.0.
 
 
 License
