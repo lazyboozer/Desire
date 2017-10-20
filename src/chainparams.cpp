@@ -128,7 +128,11 @@ public:
 
 
         vSeeds.push_back(CDNSSeedData("desire_node_1", "35.193.230.218"));
-        vSeeds.push_back(CDNSSeedData("desire_node_2", "35.201.173.221"));
+		vSeeds.push_back(CDNSSeedData("desire_node_2", "109.205.244.150"));
+		vSeeds.push_back(CDNSSeedData("desire_node_3", "202.5.19.121"));
+	    vSeeds.push_back(CDNSSeedData("desire_node_4", "160.19.49.41"));
+        vSeeds.push_back(CDNSSeedData("bigmine", "194.67.213.243"));
+
 
         // Desire addresses start with 'D'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,30);
