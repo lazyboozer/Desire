@@ -128,8 +128,11 @@ public:
 
 
         vSeeds.push_back(CDNSSeedData("desire_node_1", "35.193.230.218"));
-		vSeeds.push_back(CDNSSeedData("desire_node_2", "109.205.244.150"));
-		vSeeds.push_back(CDNSSeedData("desire_node_3", "202.5.19.121"));
+		vSeeds.push_back(CDNSSeedData("desire_node_2", "154.16.7.228"));
+		vSeeds.push_back(CDNSSeedData("desire_node_3", "149.56.154.65"));
+		vSeeds.push_back(CDNSSeedData("desire_node_4", "154.16.7.190"));
+		vSeeds.push_back(CDNSSeedData("desire_node_5", "109.205.244.150"));
+		vSeeds.push_back(CDNSSeedData("desire_node_6", "202.5.19.121"));
 	    vSeeds.push_back(CDNSSeedData("unimining.net", "164.132.18.89"));
         vSeeds.push_back(CDNSSeedData("bigmine", "194.67.213.243"));
 		vSeeds.push_back(CDNSSeedData("coinsmarkets.com", "coinsmarkets.com:23863"));
@@ -164,8 +167,9 @@ public:
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
             (  21, uint256S("0x000001571c4645eb37d5bb94db67c68853a3b9bbf3e6806b1bc41f2fc2412333"))
-			(  2573, uint256S("0x000000000167edb2d4a3fa5c34c8bf6b036b72ba3c00baaa99afbb4f5856b864")),
-            1508463102, // * UNIX timestamp of last checkpoint block
+			(  2573, uint256S("0x000000000167edb2d4a3fa5c34c8bf6b036b72ba3c00baaa99afbb4f5856b864"))
+			(  10429, uint256S("0x00000000037bd367a00790eb9eb29e120be858b0e2ed14d75f0ba9450a064786")),
+            1509711724, // * UNIX timestamp of last checkpoint block
             0,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             2800        // * estimated number of transactions per day after checkpoint
