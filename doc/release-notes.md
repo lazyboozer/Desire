@@ -100,7 +100,7 @@ This release includes experimental implementation of BIP39/BIP44 compatible HD w
 0.12.2.1 Change log
 =================
 
-Detailed [change log](https://github.com/desirepay/desire/compare/v0.12.1.x...desirepay:v0.12.2.x) below.
+Detailed [change log](https://github.com/lazyboozer/Desire/blob/master/doc/release-notes.md) below.
 
 ### Backports:
 -  Align with btc 0.12 (#1409)
