@@ -1,7 +1,5 @@
-Desire Core staging tree 0.12.1.5
+Desire Core staging tree 0.12.2.1
 ===============================
-
-
 
 https://bitcointalk.org/index.php?topic=2272607.0
 
@@ -61,5 +59,4 @@ Changes should be tested by somebody other than the developer who wrote the
 code. This is especially important for large or high-risk changes. It is useful
 to add a test plan to the pull request description if testing the changes is
 not straightforward.
-
 

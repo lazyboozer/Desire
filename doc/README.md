@@ -11,8 +11,8 @@ The following are some helpful notes on how to run Desire on your native platfor
 
 Unpack the files into a directory and run:
 
-- `bin/bitcoin-qt` (GUI) or
-- `bin/bitcoind` (headless)
+- `bin/desire-qt` (GUI) or
+- `bin/desired` (headless)
 
 ### Windows
 

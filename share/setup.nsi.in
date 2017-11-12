@@ -106,10 +106,10 @@ Section -post SEC0001
     WriteRegStr HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" UninstallString $INSTDIR\uninstall.exe
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoModify 1
     WriteRegDWORD HKCU "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" NoRepair 1
-    WriteRegStr HKCR "desirecore" "URL Protocol" ""
-    WriteRegStr HKCR "desirecore" "" "URL:Desire"
-    WriteRegStr HKCR "desirecore\DefaultIcon" "" $INSTDIR\desire-qt.exe
-    WriteRegStr HKCR "desirecore\shell\open\command" "" '"$INSTDIR\desire-qt.exe" "%1"'
+    WriteRegStr HKCR "desire" "URL Protocol" ""
+    WriteRegStr HKCR "desire" "" "URL:Desire"
+    WriteRegStr HKCR "desire\DefaultIcon" "" $INSTDIR\desire-qt.exe
+    WriteRegStr HKCR "desire\shell\open\command" "" '"$INSTDIR\desire-qt.exe" "%1"'
 SectionEnd
 
 # Macro for selecting uninstaller sections
@@ -147,7 +147,7 @@ Section -un.post UNSEC0001
     DeleteRegValue HKCU "${REGKEY}" Path
     DeleteRegKey /IfEmpty HKCU "${REGKEY}\Components"
     DeleteRegKey /IfEmpty HKCU "${REGKEY}"
-    DeleteRegKey HKCR "desirecore"
+    DeleteRegKey HKCR "desire"
     RmDir /REBOOTOK $SMPROGRAMS\$StartMenuGroup
     RmDir /REBOOTOK $INSTDIR
     Push $R0
