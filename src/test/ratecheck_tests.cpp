@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2017 The Desire Core developers
+// Copyright (c) 2017 The Desire Core developers
 
 #include "governance.h"
 

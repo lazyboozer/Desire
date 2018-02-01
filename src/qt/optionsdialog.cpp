@@ -19,9 +19,9 @@
 
 #ifdef ENABLE_WALLET
 #include "wallet/wallet.h" // for CWallet::GetRequiredFee()
-#endif
 
 #include "privatesend-client.h"
+#endif // ENABLE_WALLET
 
 #include <boost/thread.hpp>
 
@@ -32,7 +32,9 @@
 #include <QMessageBox>
 #include <QTimer>
 
+#ifdef ENABLE_WALLET
 extern CWallet* pwalletMain;
+#endif // ENABLE_WALLET
 
 OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     QDialog(parent),
@@ -90,11 +92,10 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
     }
     
     /* Theme selector */
-    ui->theme->addItem(QString("DESIRE-light"), QVariant("light"));
-    ui->theme->addItem(QString("DESIRE-light-hires"), QVariant("light-hires"));
-    ui->theme->addItem(QString("DESIRE-blue"), QVariant("drkblue"));
-    ui->theme->addItem(QString("DESIRE-Crownium"), QVariant("crownium"));
-    ui->theme->addItem(QString("DSR-traditional"), QVariant("trad"));
+    ui->theme->addItem(QString("DESIRE-Original"), QVariant("light"));
+    ui->theme->addItem(QString("DESIRE-Color"), QVariant("drkblue"));
+    ui->theme->addItem(QString("DESIRE-Black"), QVariant("crownium"));
+    ui->theme->addItem(QString("DESIRE-traditional"), QVariant("trad"));
     
     /* Language selector */
     QDir translations(":translations");
@@ -262,8 +263,11 @@ void OptionsDialog::on_resetButton_clicked()
 void OptionsDialog::on_okButton_clicked()
 {
     mapper->submit();
+#ifdef ENABLE_WALLET
     privateSendClient.nCachedNumBlocks = std::numeric_limits<int>::max();
-    pwalletMain->MarkDirty();
+    if(pwalletMain)
+        pwalletMain->MarkDirty();
+#endif // ENABLE_WALLET
     accept();
     updateDefaultProxyNets();
 }

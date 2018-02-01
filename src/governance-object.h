@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2017 The Desire Core developers
+// Copyright (c) 2017 The Desire Core developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -162,7 +162,7 @@ private:
     /// true == minimum network support has been reached for this object to be funded (doesn't mean it will for sure though)
     bool fCachedFunding;
 
-    /// true == minimum network has been reached flagging this object as a valid and understood goverance object (e.g, the serialized data is correct format, etc)
+    /// true == minimum network has been reached flagging this object as a valid and understood governance object (e.g, the serialized data is correct format, etc)
     bool fCachedValid;
 
     /// true == minimum network support has been reached saying this object should be deleted from the system entirely

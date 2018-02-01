@@ -1,15 +1,17 @@
-Desire Core version 0.12.2.1
-========================
+Desire Core version 0.12.2.2
+==========================
 
 Release is now available from:
 
-  <http://www.desire-crypto.com/downloads>
+  <https://www.desire.org/downloads/#wallets>
 
-This is a new major version release, bringing new features and other improvements.
+This is a new minor version release, bringing various bugfixes and other
+improvements.
 
 Please report bugs using the issue tracker at github:
 
   <https://github.com/desirepay/desire/issues>
+
 
 Upgrading and downgrading
 =========================
@@ -20,326 +22,239 @@ How to Upgrade
 If you are running an older version, shut it down. Wait until it has completely
 shut down (which might take a few minutes for older versions), then run the
 installer (on Windows) or just copy over /Applications/Desire-Qt (on Mac) or
-desired/desire-qt (on Linux).
+desired/desire-qt (on Linux). Because of the per-UTXO fix (see below) there is a
+one-time database upgrade operation, so expect a slightly longer startup time on
+the first run.
 
 Downgrade warning
 -----------------
-### Downgrade to a version < 0.12.2.1
 
-Because release 0.12.2 includes DIP0001 (2 MB block size hardfork) plus
-a transaction fee reduction and a fix for masternode rank calculation algo
-(which activation also depends on DIP0001) this release will not be
-backwards compatible after DIP0001 lock in/activation happens.
+### Downgrade to a version < 0.12.2.2
+
+Because release 0.12.2.2 includes the per-UTXO fix (see below) which changes the
+structure of the internal database, this release is not fully backwards
+compatible. You will have to reindex the database if you decide to use any
+previous version.
 
 This does not affect wallet forward or backward compatibility.
+
 
 Notable changes
 ===============
 
-DIP0001
--------
+Per-UTXO fix
+------------
 
-We outline an initial scaling mechanism for Desire. After deployment and activation, Desire will be able to handle double the transactions it can currently handle. Together with the faster block times, Desire we will be prepared to handle eight times the traffic of Bitcoin.
+This fixes a potential vulnerability, so called 'Corebleed', which was
+demonstrated this summer at the Вrеаkіng Віtсоіn Соnfеrеnсе іn Раrіs. The DoS
+can cause nodes to allocate excessive amounts of memory, which leads them to a
+halt. You can read more about the fix in the original Bitcoin Core pull request
+https://github.com/bitcoin/bitcoin/pull/10195
 
+To fix this issue in Desire Core however, we had to backport a lot of other
+improvements from Bitcoin Core, see full list of backports in the detailed
+change log below.
 
-Fee reduction
--------------
+Additional indexes fix
+----------------------
 
-All transaction fees are reduced 10x (from 10K per Kb to 1K per Kb), including fees for InstantSend (from 0.001 DSR per input to 0.0001 per input)
+If you were using additional indexes like `addressindex`, `spentindex` or
+`timestampindex` it's possible that they are not accurate. Please consider
+reindexing the database by starting your node with `-reindex` command line
+option. This is a one-time operation, the issue should be fixed now.
 
 InstantSend fix
 ---------------
 
-The potential vulnerability found by Matt Robertson and Alexander Block was fixed in d7a8489f3 (#1620).
+InstantSend should work with multisig addresses now.
 
-RPC changes
------------
+PrivateSend fix
+---------------
 
-There are few changes in existing RPC in this release:
-- There is no more `bcconfirmations` field in RPC output and `confirmations` shows blockchain only confirmations by default now. You can change this behaviour by switching new `addlockconf` param to `true`. There is a new rpc field `instantlock` which indicates whether a given transaction is locked via InstantSend. For more info and examples please see https://github.com/desirepay/desire/doc/instantsend.md;
-- `gobject list` and `gobject diff` accept `funding`, `delete` and `endorsed` filtering options now, in addition to `valid` and `all` currently available;
-- `vin` field in `masternode` commands is renamed to `outpoint` and shows data in short format now;
-- `getblocktemplate` output is extended with versionbits-related information;
-- Output of wallet-related commands `validateaddress` is extended with optional `hdkeypath` and `hdchainid` fields.
+Some internal data structures were not cleared properly, which could lead
+to a slightly higher memory consumption over a long period of time. This was
+a minor issue which was not affecting mixing speed or user privacy in any way.
 
-There are few new RPC commands also:
-- `masternodelist info` shows additional information about sentinel for each masternode in the list;
-- `masternodelist pubkey` shows pubkey corresponding to masternodeprivkey for each masternode in the list;
-- `gobject check` allows to check proposal data for correctness before preparing/submitting the proposal, `gobject prepare` and `gobject submit` should also perform additional validation now though;
-- `setnetworkactive` allows to turn all network activity on and off;
-- `dumphdinfo` displays some information about HD wallet (if available).
+Removal of support for local masternodes
+----------------------------------------
 
-Command-line options
---------------------
+Keeping a wallet with 1000 DSR unlocked for 24/7 is definitely not a good idea
+anymore. Because of this fact, it's also no longer reasonable to update and test
+this feature, so it's completely removed now. If for some reason you were still
+using it, please follow one of the guides and setup a remote masternode instead.
 
-New: `assumevalid`, `blocksonly, `reindex-chainstate`
+Dropping old (pre-12.2) peers
+-----------------------------
 
-Experimental: `usehd`, `mnemonic`, `mnemonicpassphrase`, `hdseed`
+Connections from peers with protocol lower than 70208 are no longer accepted.
 
-See `Help -> Command-line options` in Qt wallet or `desired --help` for more info.
+Other improvements and bug fixes
+--------------------------------
 
-PrivateSend improvements
-------------------------
+As a result of previous intensive refactoring and some additional fixes,
+it should be possible to compile Desire Core with `--disable-wallet` option now.
 
-Algorithm for selecting inputs was slightly changed in [`6067896ae`](6067896ae) ([#1248](https://github.com/desirepay/desire/pull/1248)). This should allow user to get some mixed funds much faster.
+This release also improves sync process and significantly lowers the time after
+which `getblocktemplate` rpc becomes available on node start.
 
-Lots of backports, refactoring and bug fixes
---------------------------------------------
+And as usual, various small bugs and typos were fixed and more refactoring was
+done too.
 
-We backported some performance improvements from Bitcoin Core and aligned our codebase with their source a little bit better. We still do not have all the improvements so this work is going to be continued in next releases.
 
-A lot of refactoring and other fixes should make code more reliable and easier to review now.
+0.12.2.2 Change log
+===================
 
-Experimental HD wallet
-----------------------
-
-This release includes experimental implementation of BIP39/BIP44 compatible HD wallet. Wallet type (HD or non-HD) is selected when wallet is created via `usehd` command-line option, default is `0` which means that a regular non-deterministic wallet is going to be used. If you decide to use HD wallet, you can also specify BIP39 mnemonic and mnemonic passphrase (see `mnemonic` and `mnemonicpassphrase` command-line options) but you can do so only on initial wallet creation and can't change these afterwards. If you don't specify them, mnemonic is going to be generated randomly and mnemonic passphrase is going to be just a blank string.
-
-**WARNING:** The way it's currently implemented is NOT safe and is NOT recommended to use on mainnet. Wallet is created unencrypted with mnemonic stored inside, so even if you encrypt it later there will be a short period of time when mnemonic is stored in plain text. This issue will be addressed in future releases.
-
-0.12.2.1 Change log
-=================
-
-Detailed [change log](https://github.com/lazyboozer/Desire/blob/master/doc/release-notes.md) below.
+See detailed [change log](https://github.com/desirepay/desire/compare/v0.12.2.1...desirepay:v0.12.2.2) below.
 
 ### Backports:
--  Align with btc 0.12 (#1409)
--  Fix for desire-qt issue with startup and multiple monitors. (#1461)
--  Force to use C++11 mode for compilation (#1463)
--  Make strWalletFile const (#1459)
--  Access WorkQueue::running only within the cs lock. (#1460)
--  trivial: fix bloom filter init to isEmpty = true (#1458)
--  Avoid ugly exception in log on unknown inv type (#1457)
--  Don't return the address of a P2SH of a P2SH (#1455)
--  Generate auth cookie in hex instead of base64 (#1454)
--  Do not shadow LOCK's criticalblock variable for LOCK inside LOCK (#1453)
--  Remove unnecessary LOCK(cs_main) in getrawpmempool (#1452)
--  Remove duplicate bantablemodel.h include (#1446)
--  Fix for build on Ubuntu 14.04 with system libraries (#1467)
--  Improve EncodeBase58/DecodeBase58 performance (#1456)
--  auto_ptr → unique_ptr
--  Boost 1.61.0
--  Boost 1.63.0
--  Minimal fix to slow prevector tests as stopgap measure
--  build: fix qt5.7 build under macOS (#1469)
--  Increase minimum debug.log size to 10MB after shrink. (#1480)
--  Backport Bitcoin PRs #6589, #7180 and remaining part of #7181: enable per-command byte counters in `CNode` (#1496)
--  Increase test coverage for addrman and addrinfo (#1497)
--  Eliminate unnecessary call to CheckBlock (#1498)
--  Backport Bincoin PR#7348: MOVE ONLY: move rpc* to rpc/ + same for Desire-specific rpc (#1502)
--  Backport Bitcoin PR#7349: Build against system UniValue when available (#1503)
--  Backport Bitcoin PR#7350: Banlist updates (#1505)
--  Backport Bitcoin PR#7458: [Net] peers.dat, banlist.dat recreated when missing (#1506)
--  Backport Bitcoin PR#7696: Fix de-serialization bug where AddrMan is corrupted after exception (#1507)
--  Backport Bitcoin PR#7749: Enforce expected outbound services (#1508)
--  Backport Bitcoin PR#7917: Optimize reindex (#1515)
--  Remove non-determinism which is breaking net_tests #8069 (#1517)
--  fix race that could fail to persist a ban (#1518)
--  Backport Bitcoin PR#7906: net: prerequisites for p2p encapsulation changes (#1521)
--  Backport Bitcoin PR#8084: Add recently accepted blocks and txn to AttemptToEvictConnection (#1522)
--  Backport Bitcoin PR#8113: Rework addnode behaviour (#1525)
--  Remove bad chain alert partition check (#1529)
--  Added feeler connections increasing good addrs in the tried table. (#1530)
--  Backport Bitcoin PR#7942: locking for Misbehave() and other cs_main locking fixes (#1535)
--  Backport Bitcoin PR#8085: p2p: Begin encapsulation (#1537)
--  Backport Bitcoin PR#8049: Expose information on whether transaction relay is enabled in `getnetwork` (#1545)
--  backport 9008: Remove assert(nMaxInbound > 0) (#1548)
--  Backport Bitcoin PR#8708: net: have CConnman handle message sending (#1553)
--  net: only delete CConnman if it's been created (#1555)
--  Backport Bitcoin PR#8865: Decouple peer-processing-logic from block-connection-logic (#1556)
--  Backport Bitcoin PR#8969: Decouple peer-processing-logic from block-connection-logic (#2) (#1558)
--  Backport Bitcoin PR#9075: Decouple peer-processing-logic from block-connection-logic (#3) (#1560)
--  Backport Bitcoin PR#9183: Final Preparation for main.cpp Split (#1561)
--  Backport Bitcoin PR#8822: net: Consistent checksum handling (#1565)
--  Backport Bitcoin PR#9260: Mrs Peacock in The Library with The Candlestick (killed main.{h,cpp}) (#1566)
--  Backport Bitcoin PR#9289: net: drop boost::thread_group (#1568)
--  Backport Bitcoin PR#9609: net: fix remaining net assertions (#1575) + Desireify
--  Backport Bitcoin PR#9441: Net: Massive speedup. Net locks overhaul (#1586)
--  Backport "assumed valid blocks" feature from Bitcoin 0.13 (#1582)
--  Partially backport Bitcoin PR#9626: Clean up a few CConnman cs_vNodes/CNode things (#1591)
--  Do not add random inbound peers to addrman. (#1593)
--  net: No longer send local address in addrMe (#1600)
--  Backport Bitcoin PR#7868: net: Split DNS resolving functionality out of net structures (#1601)
--  Backport Bitcoin PR#8128: Net: Turn net structures into dumb storage classes (#1604)
--  Backport Bitcoin Qt/Gui changes up to 0.14.x part 1 (#1614)
--  Backport Bitcoin Qt/Gui changes up to 0.14.x part 2 (#1615)
--  Backport Bitcoin Qt/Gui changes up to 0.14.x part 3 (#1617)
--  Merge #8944: Remove bogus assert on number of oubound connections. (#1685)
--  Merge #10231: [Qt] Reduce a significant cs_main lock freeze (#1704)
+- [`996f5103a`](https://github.com/desirepay/desire/commit/996f5103a) Backport #7056: Save last db read
+- [`23fe35a18`](https://github.com/desirepay/desire/commit/23fe35a18) Backport #7756: Add cursor to iterate over utxo set, use this in `gettxoutsetinfo`
+- [`17f2ea5d7`](https://github.com/desirepay/desire/commit/17f2ea5d7) Backport #7904: txdb: Fix assert crash in new UTXO set cursor
+- [`2e54bd2e8`](https://github.com/desirepay/desire/commit/2e54bd2e8) Backport #7927: Minor changes to dbwrapper to simplify support for other databases
+- [`abaf524f0`](https://github.com/desirepay/desire/commit/abaf524f0) Backport #7815: Break circular dependency main ↔ txdb
+- [`02a6cef94`](https://github.com/desirepay/desire/commit/02a6cef94) Move index structures into spentindex.h
+- [`d92b454a2`](https://github.com/desirepay/desire/commit/d92b454a2) Add SipHash-2-4 primitives to hash
+- [`44526af95`](https://github.com/desirepay/desire/commit/44526af95) Use SipHash-2-4 for CCoinsCache index
+- [`60e6a602e`](https://github.com/desirepay/desire/commit/60e6a602e) Use C++11 thread-safe static initializers in coins.h/coins.cpp
+- [`753cb1563`](https://github.com/desirepay/desire/commit/753cb1563) Backport #7874: Improve AlreadyHave
+- [`952383e16`](https://github.com/desirepay/desire/commit/952383e16) Backport #7933: Fix OOM when deserializing UTXO entries with invalid length
+- [`e3b7ed449`](https://github.com/desirepay/desire/commit/e3b7ed449) Backport #8273: Bump `-dbcache` default to 300MiB
+- [`94e01eb66`](https://github.com/desirepay/desire/commit/94e01eb66) Backport #8467: [Trivial] Do not shadow members in dbwrapper
+- [`105fd1815`](https://github.com/desirepay/desire/commit/105fd1815) Use fixed preallocation instead of costly GetSerializeSize
+- [`6fbe93aa7`](https://github.com/desirepay/desire/commit/6fbe93aa7) Backport #9307: Remove undefined FetchCoins method declaration
+- [`6974f1723`](https://github.com/desirepay/desire/commit/6974f1723) Backport #9346: Batch construct batches
+- [`4b4d22293`](https://github.com/desirepay/desire/commit/4b4d22293) Backport #9308: [test] Add CCoinsViewCache Access/Modify/Write tests
+- [`a589c94a9`](https://github.com/desirepay/desire/commit/a589c94a9) Backport #9107: Safer modify new coins
+- [`09b3e042f`](https://github.com/desirepay/desire/commit/09b3e042f) Backport #9310: Assert FRESH validity in CCoinsViewCache::BatchWrite
+- [`ceb64fcd4`](https://github.com/desirepay/desire/commit/ceb64fcd4) Backport #8610: Share unused mempool memory with coincache
+- [`817ecc03d`](https://github.com/desirepay/desire/commit/817ecc03d) Backport #9353: Add data() method to CDataStream (and use it)
+- [`249db2776`](https://github.com/desirepay/desire/commit/249db2776) Backport #9999: [LevelDB] Plug leveldb logs to bitcoin logs
+- [`cfefd34f4`](https://github.com/desirepay/desire/commit/cfefd34f4) Backport #10126: Compensate for memory peak at flush time
+- [`ff9b2967a`](https://github.com/desirepay/desire/commit/ff9b2967a) Backport #10133: Clean up calculations of pcoinsTip memory usage
+- [`567043d36`](https://github.com/desirepay/desire/commit/567043d36) Make DisconnectBlock and ConnectBlock static in validation.cpp
+- [`9a266e68d`](https://github.com/desirepay/desire/commit/9a266e68d) Backport #10297: Simplify DisconnectBlock arguments/return value
+- [`fc5ced317`](https://github.com/desirepay/desire/commit/fc5ced317) Backport #10445: Add test for empty chain and reorg consistency for gettxoutsetinfo.
+- [`6f1997182`](https://github.com/desirepay/desire/commit/6f1997182) Add COMPACTSIZE wrapper similar to VARINT for serialization
+- [`b06a6a2e7`](https://github.com/desirepay/desire/commit/b06a6a2e7) Fix use of missing self.log in blockchain.py
+- [`8ed672219`](https://github.com/desirepay/desire/commit/8ed672219) Backport #10250: Fix some empty vector references
+- [`afa96b7c1`](https://github.com/desirepay/desire/commit/afa96b7c1) Backport #10249: Switch CCoinsMap from boost to std unordered_map
+- [`c81394b97`](https://github.com/desirepay/desire/commit/c81394b97) Backport #10195: Switch chainstate db and cache to per-txout model
+- [`d4562b5e5`](https://github.com/desirepay/desire/commit/d4562b5e5) Fix CCoinsViewCache::GetPriority to use new per-utxo
+- [`92bb65894`](https://github.com/desirepay/desire/commit/92bb65894) Fix address index to use new per-utxo DB
+- [`9ad56fe18`](https://github.com/desirepay/desire/commit/9ad56fe18) Desire related fixes for per-utxo DB
+- [`4f807422f`](https://github.com/desirepay/desire/commit/4f807422f) Backport #10550: Don't return stale data from CCoinsViewCache::Cursor()
+- [`151c552c7`](https://github.com/desirepay/desire/commit/151c552c7) Backport #10537: Few Minor per-utxo assert-semantics re-adds and tweak
+- [`06aa02ff6`](https://github.com/desirepay/desire/commit/06aa02ff6) Backport #10559: Change semantics of HaveCoinInCache to match HaveCoin
+- [`549839a50`](https://github.com/desirepay/desire/commit/549839a50) Backport #10581: Simplify return values of GetCoin/HaveCoin(InCache)
+- [`5b232161a`](https://github.com/desirepay/desire/commit/5b232161a) Backport #10558: Address nits from per-utxo change
+- [`1a9add78c`](https://github.com/desirepay/desire/commit/1a9add78c) Backport #10660: Allow to cancel the txdb upgrade via splashscreen keypress 'q'
+- [`4102211a3`](https://github.com/desirepay/desire/commit/4102211a3) Backport #10526: Force on-the-fly compaction during pertxout upgrade
+- [`8780c762e`](https://github.com/desirepay/desire/commit/8780c762e) Backport #10985: Add undocumented -forcecompactdb to force LevelDB compactions
+- [`4cd19913d`](https://github.com/desirepay/desire/commit/4cd19913d) Backport #10998: Fix upgrade cancel warnings
+- [`371feda4c`](https://github.com/desirepay/desire/commit/371feda4c) Backport #11529: Avoid slow transaction search with txindex enabled
+- [`cdb2b1944`](https://github.com/desirepay/desire/commit/cdb2b1944) build: quiet annoying warnings without adding new ones
+- [`fee05dab9`](https://github.com/desirepay/desire/commit/fee05dab9) build: silence gcc7's implicit fallthrough warning
+
+### Masternodes:
+- [`312663b4b`](https://github.com/desirepay/desire/commit/312663b4b) Remove support for local masternodes (#1706)
 
 ### PrivateSend:
--  mix inputs with highest number of rounds first (#1248)
--  Few fixes for PrivateSend (#1408)
--  Refactor PS (#1437)
--  PrivateSend: dont waste keys from keypool on failure in CreateDenominated (#1473)
--  fix calculation of (unconfirmed) anonymizable balance (#1477)
--  split CPrivateSend (#1492)
--  Expire confirmed DSTXes after ~1h since confirmation (#1499)
--  fix MakeCollateralAmounts (#1500)
--  fix a bug in CommitFinalTransaction (#1540)
--  fix number of blocks to wait after successful mixing tx (#1597)
--  Fix losing keys on PrivateSend (#1616)
--  Make sure mixing masternode follows bip69 before signing final mixing tx (#1510)
--  speedup MakeCollateralAmounts by skiping denominated inputs early (#1631)
--  Keep track of wallet UTXOs and use them for PS balances and rounds calculations (#1655)
--  do not calculate stuff that are not going to be visible in simple PS UI anyway (#1656)
+- [`7e96af4e6`](https://github.com/desirepay/desire/commit/7e96af4e6) Refactor PrivateSend (#1735)
+- [`f4502099a`](https://github.com/desirepay/desire/commit/f4502099a) make CheckDSTXes() private, execute it on both client and server (#1736)
 
 ### InstantSend:
--  Safety check in CInstantSend::SyncTransaction (#1412)
--  Fix potential deadlock in CInstantSend::UpdateLockedTransaction (#1571)
--  fix instantsendtoaddress param convertion (#1585)
--  Fix: Reject invalid instantsend transaction (#1583)
--  InstandSend overhaul (#1592)
--  fix SPORK_5_INSTANTSEND_MAX_VALUE validation in CWallet::CreateTransaction (#1619)
--  Fix masternode score/rank calculations (#1620)
--  fix instantsend-related RPC output (#1628)
--  bump MIN_INSTANTSEND_PROTO_VERSION to 70208 (#1650)
--  Fix edge case for IS (skip inputs that are too large) (#1695)
--  remove InstantSend votes for failed lock attemts after some timeout (#1705)
--  update setAskFor on TXLOCKVOTE (#1713)
--  fix bug introduced in #1695 (#1714)
-
-### Governance:
--  Few changes for governance rpc: (#1351)
--  sentinel uses status of funding votes (#1440)
--  Validate proposals on prepare and submit (#1488)
--  Replace watchdogs with ping (#1491)
--  Fixed issues with propagation of governance objects (#1489)
--  Fix issues with mapSeenGovernanceObjects (#1511)
--  change invalid version string constant (#1532)
--  Fix vulnerability with mapMasternodeOrphanObjects (#1512)
--  New rpc call "masternodelist info" (#1513)
--  add 6 to strAllowedChars (#1542)
--  fixed potential deadlock in CSuperblockManager::IsSuperblockTriggered (#1536)
--  fix potential deadlock (PR#1536 fix) (#1538)
--  fix potential deadlock in CGovernanceManager::ProcessVote (#1541)
--  fix potential deadlock in CMasternodeMan::CheckMnbAndUpdateMasternodeList (#1543)
--  Fix MasternodeRateCheck (#1490)
--  fix off-by-1 in CSuperblock::GetPaymentsLimit (#1598)
--  Relay govobj and govvote to every compatible peer, not only to the one with the same version (#1662)
--  allow up to 40 chars in proposal name (#1693)
--  start_epoch, end_epoch and payment_amount should be numbers, not strings (#1707)
-
-### Network/Sync:
--  fix sync reset which is triggered erroneously during reindex (#1478)
--  track asset sync time (#1479)
--  do not use masternode connections in feeler logic (#1533)
--  Make sure mixing messages are relayed/accepted properly (#1547)
--  fix CDSNotificationInterface::UpdatedBlockTip signature (#1562)
--  Sync overhaul (#1564)
--  limit UpdatedBlockTip in IBD (#1570)
--  Relay tx in sendrawtransaction according to its inv.type (#1584)
--  net: Consistently use GetTimeMicros() for inactivity checks (#1588)
--  Use GetAdjustedTime instead of GetTime when dealing with network-wide timestamps (#1590)
--  Fix sync issues (#1599)
--  Fix duplicate headers download in initial sync (#1589)
--  Use connman passed to ThreadSendAlert() instead of g_connman global. (#1610)
--  Eliminate g_connman use in spork module. (#1613)
--  Eliminate g_connman use in instantx module. (#1626)
--  Move some (spamy) CMasternodeSync log messages to new `mnsync` log category (#1630)
--  Eliminate remaining uses of g_connman in Desire-specific code. (#1635)
--  Wait for full sync in functional tests that use getblocktemplate. (#1642)
--  fix sync (#1643)
--  Fix unlocked access to vNodes.size() (#1654)
--  Remove cs_main from ThreadMnbRequestConnections (#1658)
--  Fix bug: nCachedBlockHeight was not updated on start (#1673)
--  Add more logging for MN votes and MNs missing votes (#1683)
--  Fix sync reset on lack of activity (#1686)
--  Fix mnp relay bug (#1700)
-
-### GUI:
--  Full path in "failed to load cache" warnings (#1411)
--  Qt: bug fixes and enhancement to traffic graph widget  (#1429)
--  Icon Cutoff Fix (#1485)
--  Fix windows installer script, should handle `desire:` uri correctly now (#1550)
--  Update startup shortcuts (#1551)
--  fix TrafficGraphData bandwidth calculation (#1618)
--  Fix empty tooltip during sync under specific conditions (#1637)
--  [GUI] Change look of modaloverlay (#1653)
--  Fix compilation with qt < 5.2 (#1672)
--  Translations201710 - en, de, fi, fr, ru, vi (#1659)
--  Translations 201710 part2 (#1676)
--  Add hires version of `light` theme for Hi-DPI screens (#1712)
+- [`4802a1fb7`](https://github.com/desirepay/desire/commit/4802a1fb7) Allow IS for all txes, not only for txes with p2pkh and data outputs (#1760)
+- [`f37a64208`](https://github.com/desirepay/desire/commit/f37a64208) InstantSend txes should never qualify to be a 0-fee txes (#1777)
 
 ### DIP0001:
--  DIP0001 implementation (#1594)
--  Dip0001-related adjustments (inc. constants) (#1621)
--  fix fDIP0001* flags initialization (#1625)
--  fix DIP0001 implementation (#1639)
--  fix: update DIP0001 related stuff even in IBD (#1652)
--  fix: The idea behind fDIP0001LockedInAtTip was to indicate that it WAS locked in, not that it IS locked in (#1666)
+- [`3028af19f`](https://github.com/desirepay/desire/commit/3028af19f) post-DIP0001 cleanup (#1763)
+- [`51b2c7501`](https://github.com/desirepay/desire/commit/51b2c7501) Fix WarningBitsConditionChecker (#1765)
 
-### Wallet:
--  HD wallet (#1405)
--  Minor Warning Fixed (#1482)
--  Disable HD wallet by default (#1629)
--  Lower tx fees 10x (#1632)
--  Ensure Desire wallets < 0.12.2 can't open HD wallets (#1638)
--  fix fallback fee (#1649)
+### Network/Sync:
+- [`5d58dd90c`](https://github.com/desirepay/desire/commit/5d58dd90c) Make sure to clear setAskFor in Desire submodules (#1730)
+- [`328009749`](https://github.com/desirepay/desire/commit/328009749) fine-tune sync conditions in getblocktemplate (#1739)
+- [`362becbcc`](https://github.com/desirepay/desire/commit/362becbcc) Bump MIN_PEER_PROTO_VERSION to 70208 (#1772)
+- [`930afd7df`](https://github.com/desirepay/desire/commit/930afd7df) Fix mnp and mnv invs (#1775)
+- [`63e306148`](https://github.com/desirepay/desire/commit/63e306148) Improve sync (#1779)
+- [`a79c97248`](https://github.com/desirepay/desire/commit/a79c97248) Fix ProcessVerifyBroadcast (#1780)
 
-### RPC:
--  add `masternodelist pubkey` to rpc (#1549)
--  more "vin" -> "outpoint" in masternode rpc output (#1633)
--  fix `masternode current` rpc (#1640)
--  remove send addresses from listreceivedbyaddress output (#1664)
--  fix Examples section of the RPC output for listreceivedbyaccount, listreceivedbyaccount and sendfrom commands (#1665)
--  RPC help formatting updates (#1670)
--  Revert "fix `masternode current` rpc (#1640)" (#1681)
--  partially revert "[Trivial] RPC help formatting updates #1670" (#1711)
+### Build:
+- [`c166ed39b`](https://github.com/desirepay/desire/commit/c166ed39b) Allow compilation with `--disable-wallet` (#1733)
+- [`31bc9d4ee`](https://github.com/desirepay/desire/commit/31bc9d4ee) Show test progress for tests running in wine to avoid Travis timeout (#1740)
+- [`32f21698e`](https://github.com/desirepay/desire/commit/32f21698e) Adjust tests to avoid Travis timeouts (#1745)
+- [`837c4fc5d`](https://github.com/desirepay/desire/commit/837c4fc5d) Force rcc to use resource format version 1. (#1784)
+
+### GUI:
+- [`70cb2a4af`](https://github.com/desirepay/desire/commit/70cb2a4af) Fix traditional UI theme (#1741)
+- [`e975f891c`](https://github.com/desirepay/desire/commit/e975f891c) Fix ru typo (#1742)
 
 ### Docs:
--  Doc: fix broken formatting in markdown #headers (#1462)
--  Added clarifications in INSTALL readme for newcomers (#1481)
--  Documentation: Add spork message / details to protocol-documentation.md (#1493)
--  Documentation: Update undocumented messages in protocol-documentation.md  (#1596)
--  Update `instantsend.md` according to PR#1628 changes (#1663)
--  Update build-osx.md formatting (#1690)
--  12.2 release notes (#1675)
+- [`bc8342558`](https://github.com/desirepay/desire/commit/bc8342558) Two small fixes in docs (#1746)
+- [`9e7cc56cb`](https://github.com/desirepay/desire/commit/9e7cc56cb) Fix typo in release-notes.md (#1759)
+- [`3f3705c47`](https://github.com/desirepay/desire/commit/3f3705c47) [Trivial] Typo/doc updates and RPC help formatting (#1758)
+- [`e96da9f19`](https://github.com/desirepay/desire/commit/e96da9f19) move 0.12.2 release notes
+- [`6915ee45e`](https://github.com/desirepay/desire/commit/6915ee45e) Bump version in README.md to 0.12.2 (#1774)
+- [`0291604ad`](https://github.com/desirepay/desire/commit/0291604ad) Clarify usage of pointers and references in code (#1778)
 
-### Other (noticeable) refactoring and fixes:
--  Refactor: CDarkSendSigner (#1410)
--  Implement BIP69 outside of CTxIn/CTxOut (#1514)
--  fix deadlock (#1531)
--  fixed potential deadlock in CMasternodePing::SimpleCheck (#1534)
--  Masternode classes: Remove repeated/un-needed code and data (#1572)
--  add/use GetUTXO\[Coins/Confirmations\] helpers instead of GetInputAge\[IX\] (#1578)
--  drop pCurrentBlockIndex and use cached block height instead (nCachedBlockHeight) (#1579)
--  drop masternode index (#1580)
--  slightly refactor CDSNotificationInterface (#1581)
--  safe version of GetMasternodeByRank (#1595)
--  Refactor masternode management (#1611)
--  Remove some recursive locks (#1624)
+### Other:
+- [`ccbd5273e`](https://github.com/desirepay/desire/commit/ccbd5273e) bump to 0.12.3.0 (#1726)
+- [`865b61b50`](https://github.com/desirepay/desire/commit/865b61b50) Unify GetNextWorkRequired (#1737)
+- [`d1aeac1b2`](https://github.com/desirepay/desire/commit/d1aeac1b2) Spelling mistake in validation.cpp (#1752)
+- [`442325b07`](https://github.com/desirepay/desire/commit/442325b07) add `maxgovobjdatasize` field to the output of `getgovernanceinfo` (#1757)
+- [`c5ec2f82a`](https://github.com/desirepay/desire/commit/c5ec2f82a) Drop `IsNormalPaymentScript`, use `IsPayToPublicKeyHash` (#1761)
+- [`f9f28e7c7`](https://github.com/desirepay/desire/commit/f9f28e7c7) De-bump to 0.12.2.2 (#1768)
+- [`54186a159`](https://github.com/desirepay/desire/commit/54186a159) Make sure additional indexes are recalculated correctly in VerifyDB (#1773)
+- [`86e6f0dd2`](https://github.com/desirepay/desire/commit/86e6f0dd2) Fix CMasternodeMan::ProcessVerify* logs (#1782)
 
-### Other (technical) commits:
--  bump to 0.12.2.0 (#1407)
--  Merge remote-tracking branch 'remotes/origin/master' into v0.12.2.x
--  Merge pull request #1431 from desirepay/v0.12.2.x-merge_upstream
--  Fixed pow (test and algo) (#1415)
--  c++11: don't throw from the reverselock destructor (#1421)
--  Rename bitcoinconsensus library to desireconsensus. (#1432)
--  Fix the same header included twice. (#1474)
--  fix travis ci mac build (#1483)
--  fix BIP34 starting blocks for mainnet/testnet (#1476)
--  adjust/fix some log and error messages (#1484)
--  Desireify bitcoin unix executables (#1486)
--  Don't try to create empty datadir before the real path is known (#1494)
--  Force self-recheck on CActiveMasternode::ManageStateRemote() (#1441)
--  various trivial cleanup fixes (#1501)
--  include atomic (#1523)
--  Revert "fixed regtest+ds issues" (#1524)
--  workaround for travis (#1526)
--  Pass reference when calling HasPayeeWithVotes (#1569)
--  typo: "Writting" -> "Writing" (#1605)
--  build: silence gcc7's implicit fallthrough warning (#1622)
--  bump MIN_MASTERNODE_PAYMENT_PROTO_VERSION_2 and PROTOCOL_VERSION to 70208 (#1636)
--  fix BIP68 granularity and mask (#1641)
--  Revert "fix BIP68 granularity and mask (#1641)" (#1647)
--  Fork testnet to test 12.2 migration (#1660)
--  fork testnet again to re-test dip0001 because of 2 bugs found in 1st attempt (#1667)
--  update nMinimumChainWork and defaultAssumeValid for testnet (#1668)
--  fix `setnetworkactive` (typo) (#1682)
--  update nCollateralMinConfBlockHash for local (hot) masternode on mn start (#1689)
--  Fix/optimize images (#1688)
--  fix trafficgraphdatatests for qt4 (#1699)
 
+Credits
+=======
+
+Thanks to everyone who directly contributed to this release:
+
+- Alexander Block
+- shade
+- sidhujag
+- thephez
+- turbanoff
+- Ilya Savinov
+- UdjinM6
+- Will Wray
+
+As well as Bitcoin Core Developers and everyone that submitted issues,
+reviewed pull requests or helped translating on
+[Transifex](https://www.transifex.com/projects/p/desire/).
+
+
+Older releases
+==============
+
+Desire was previously known as Darkcoin.
+
+Darkcoin tree 0.8.x was a fork of Litecoin tree 0.8, original name was XCoin
+which was first released on Jan/18/2014.
+
+Darkcoin tree 0.9.x was the open source implementation of masternodes based on
+the 0.8.x tree and was first released on Mar/13/2014.
+
+Darkcoin tree 0.10.x used to be the closed source implementation of Darksend
+which was released open source on Sep/25/2014.
+
+Desire Core tree 0.11.x was a fork of Bitcoin Core tree 0.9,
+Darkcoin was rebranded to Desire.
+
+Desire Core tree 0.12.0.x was a fork of Bitcoin Core tree 0.10.
+
+Desire Core tree 0.12.1.x was a fork of Bitcoin Core tree 0.12.
+
+These release are considered obsolete. Old release notes can be found here:
+
+- [v0.12.2](release-notes/desire/release-notes-0.12.2.md) released Nov/08/2017
+- [v0.12.1](release-notes/desire/release-notes-0.12.1.md) released ???/??/2016
+- [v0.12.0](release-notes/desire/release-notes-0.12.0.md) released ???/??/2015
+- [v0.11.2](release-notes/desire/release-notes-0.11.2.md) released Mar/25/2015
+- [v0.11.1](release-notes/desire/release-notes-0.11.1.md) released Feb/10/2015
+- [v0.11.0](release-notes/desire/release-notes-0.11.0.md) released Jan/15/2015
+- [v0.10.x](release-notes/desire/release-notes-0.10.0.md) released Sep/25/2014
+- [v0.9.x](release-notes/desire/release-notes-0.9.0.md) released Mar/13/2014
 

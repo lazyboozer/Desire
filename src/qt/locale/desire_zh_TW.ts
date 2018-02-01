@@ -3712,7 +3712,7 @@ https://www.transifex.com/projects/p/desire/</translation>
     </message>
     <message>
         <source>InstantSend doesn't support sending values that high yet. Transactions are currently limited to %1 DSR.</source>
-        <translation>即時到帳系統暫時並不支援這麼高的交易金額。目前的金額僅限於%1 DESIRE。</translation>
+        <translation>即時到帳系統暫時並不支援這麼高的交易金額。目前的金額僅限於%1 DSR。</translation>
     </message>
     <message>
         <source>Used way too many inputs (&gt;%1) for this InstantSend transaction, fees could be huge.</source>
@@ -4486,7 +4486,7 @@ https://www.transifex.com/projects/p/desire/</translation>
     </message>
     <message>
         <source>InstantSend doesn't support sending values that high yet. Transactions are currently limited to %1 DSR.</source>
-        <translation>即時到帳系統暫時並不支援這麼高的交易金額。目前的金額僅限於%1 DESIRE。</translation>
+        <translation>即時到帳系統暫時並不支援這麼高的交易金額。目前的金額僅限於%1 DSR。</translation>
     </message>
     <message>
         <source>InstantSend requires inputs with at least %d confirmations, you might need to wait a few minutes and try again.</source>
@@ -4526,7 +4526,7 @@ https://www.transifex.com/projects/p/desire/</translation>
     </message>
     <message>
         <source>Unable to locate enough PrivateSend non-denominated funds for this transaction that are not equal 1000 DSR.</source>
-        <translation>在本次交易中，無法找到不等於 1000 DESIRE的足夠未除名資金進行匿名發送。</translation>
+        <translation>在本次交易中，無法找到不等於 1000 DSR的足夠未除名資金進行匿名發送。</translation>
     </message>
     <message>
         <source>Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>

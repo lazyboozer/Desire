@@ -1,6 +1,6 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin Core developers
-// Copyright (c) 2014-2017 The Desire Core developers
+// Copyright (c) 2017 The Desire Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -96,6 +96,8 @@ public:
         consensus.nPowTargetSpacing = 2.5 * 60; // Desire: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
+        consensus.nPowKGWHeight = 1;
+        consensus.nPowDGWHeight = 2;
         consensus.nRuleChangeActivationThreshold = 1916; // 95% of 2016
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
@@ -109,7 +111,7 @@ public:
 
         // Deployment of DIP0001
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].bit = 1;
-        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1508036700; // Oct 15th, 2017
+        consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nStartTime = 1508025600; // Oct 15th, 2017
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nTimeout = 1539561600; // Oct 15th, 2018
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nWindowSize = 4032;
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThreshold = 3226; // 80% of 4032
@@ -118,7 +120,7 @@ public:
         consensus.nMinimumChainWork = uint256S("0x00"); 
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0x00"); //10429
+        consensus.defaultAssumeValid = uint256S("0x00"); 
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -141,15 +143,21 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x39bcbfcc23807869b05730a536ca42670914a7f97ba65be68bee9766d8c50071"));
 
 
-        vSeeds.push_back(CDNSSeedData("desire_node_1", "35.193.230.218"));
-		vSeeds.push_back(CDNSSeedData("desire_node_2", "154.16.7.228"));
-		vSeeds.push_back(CDNSSeedData("desire_node_3", "149.56.154.65"));
-		vSeeds.push_back(CDNSSeedData("desire_node_4", "154.16.7.190"));
-		vSeeds.push_back(CDNSSeedData("desire_node_5", "109.205.244.150"));
-		vSeeds.push_back(CDNSSeedData("desire_node_6", "202.5.19.121"));
+		vSeeds.push_back(CDNSSeedData("desire_node_1", "154.16.7.228"));
+		vSeeds.push_back(CDNSSeedData("desire_node_2", "149.56.154.65"));
+		vSeeds.push_back(CDNSSeedData("desire_node_3", "154.16.7.190"));
+		vSeeds.push_back(CDNSSeedData("desire_node_4", "109.205.244.150"));
+		vSeeds.push_back(CDNSSeedData("desire_node_5", "202.5.19.121"));
+		vSeeds.push_back(CDNSSeedData("desire_node_6", "35.185.122.226"));
+		vSeeds.push_back(CDNSSeedData("desire_node_7", "35.205.214.124"));
+		vSeeds.push_back(CDNSSeedData("desire_node_8", "185.236.130.103"));
+		vSeeds.push_back(CDNSSeedData("desire_node_9", "185.236.130.112"));
+		vSeeds.push_back(CDNSSeedData("desire_node_10", "194.87.92.16"));
+		vSeeds.push_back(CDNSSeedData("desire_node_11", "194.87.92.23"));		
+		vSeeds.push_back(CDNSSeedData("altmix", "5.9.51.209"));		
 	    vSeeds.push_back(CDNSSeedData("unimining.net", "164.132.18.89"));
         vSeeds.push_back(CDNSSeedData("bigmine", "194.67.213.243"));
-		vSeeds.push_back(CDNSSeedData("coinsmarkets.com", "coinsmarkets.com:23863"));
+
 
         // Desire addresses start with 'D'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,30);
@@ -179,9 +187,10 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            (  10429, uint256S("0x00000000037bd367a00790eb9eb29e120be858b0e2ed14d75f0ba9450a064786")),
-            1509711724, // * UNIX timestamp of last checkpoint block
-                  0,    // * total number of transactions between genesis and last checkpoint
+            (  10429, uint256S("0x00000000037bd367a00790eb9eb29e120be858b0e2ed14d75f0ba9450a064786"))
+			(  50277, uint256S("0x00000000037bd367a00790eb9eb29e120be858b0e2ed14d75f0ba9450a064786")),
+            1516023591, // * UNIX timestamp of last checkpoint block
+                 74137,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             5000        // * estimated number of transactions per day after checkpoint
         };
@@ -220,6 +229,8 @@ public:
         consensus.nPowTargetSpacing = 2.5 * 60; // Desire: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = false;
+        consensus.nPowKGWHeight = 2; // nPowKGWHeight >= nPowDGWHeight means "no KGW"
+        consensus.nPowDGWHeight = 1;
         consensus.nRuleChangeActivationThreshold = 1512; // 75% for testchains
         consensus.nMinerConfirmationWindow = 2016; // nPowTargetTimespan / nPowTargetSpacing
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;
@@ -239,10 +250,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_DIP0001].nThreshold = 50; // 50% of 100
 
         // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("00000000000000000000000000000000000000000000000000000003cd72a542"); //0
+        consensus.nMinimumChainWork = uint256S("0x00"); 
 
         // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("00000f79a81b6318e0f36dc486adf4bb5bb1fa34025d69b991893c42978c2027"); //0
+        consensus.defaultAssumeValid = uint256S("0x00"); 
 
         pchMessageStart[0] = 0xce;
         pchMessageStart[1] = 0xe2;
@@ -261,6 +272,7 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
+
 
         // Testnet Desire addresses start with 'y'
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,140);
@@ -333,6 +345,8 @@ public:
         consensus.nPowTargetSpacing = 2.5 * 60; // Desire: 2.5 minutes
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
+        consensus.nPowKGWHeight = 15200; // same as mainnet
+        consensus.nPowDGWHeight = 34140; // same as mainnet
         consensus.nRuleChangeActivationThreshold = 108; // 75% for testchains
         consensus.nMinerConfirmationWindow = 144; // Faster than normal for regtest (144 instead of 2016)
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].bit = 28;

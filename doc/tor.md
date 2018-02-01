@@ -1,4 +1,4 @@
-TOR SUPPORT IN DSR CORE
+TOR SUPPORT IN DESIRE CORE
 =======================
 
 It is possible to run Desire Core as a Tor hidden service, and connect to such services.

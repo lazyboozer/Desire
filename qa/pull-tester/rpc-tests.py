@@ -64,7 +64,7 @@ for arg in sys.argv[1:]:
 buildDir = BUILDDIR
 if "DESIRED" not in os.environ:
     os.environ["DESIRED"] = buildDir + '/src/desired' + EXEEXT
-if "DESIRECLI" not in os.environ:
+if "DSRCLI" not in os.environ:
     os.environ["DESIRECLI"] = buildDir + '/src/desire-cli' + EXEEXT
 
 if EXEEXT == ".exe" and "-win" not in opts:

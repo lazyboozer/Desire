@@ -4,7 +4,7 @@
 
 	* means the category has an associated class
 	
-	CDesireNetwork: DSR NETWORK (ROOT)
+	CDesireNetwork: DESIRE NETWORK (ROOT)
 	has:
 		vector<CNetworkVariable> vecNetworkVariables;
 		vector<CDesireProject> vecProjects;
@@ -19,7 +19,7 @@
 
 */
 
-	// DSR NETWORK (ROOT)
+	// DESIRE NETWORK (ROOT)
 	// 	-> NETWORK VARIABLE
 	// 		-> switch, setting
 	// 	-> CATEGORIES

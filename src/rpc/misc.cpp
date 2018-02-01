@@ -1,26 +1,27 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
-// Copyright (c) 2014-2017 The Desire Core developers
+// Copyright (c) 2017 The Desire Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "base58.h"
 #include "clientversion.h"
 #include "init.h"
-#include "validation.h"
 #include "net.h"
 #include "netbase.h"
 #include "rpc/server.h"
 #include "timedata.h"
 #include "txmempool.h"
 #include "util.h"
-#include "spork.h"
 #include "utilstrencodings.h"
+#include "validation.h"
 #ifdef ENABLE_WALLET
-#include "masternode-sync.h"
 #include "wallet/wallet.h"
 #include "wallet/walletdb.h"
 #endif
+
+#include "masternode-sync.h"
+#include "spork.h"
 
 #include <stdint.h>
 
@@ -238,7 +239,9 @@ UniValue spork(const UniValue& params, bool fHelp)
                 ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), sporkManager.IsSporkActive(nSporkID)));
         }
         return ret;
-    } else if (params.size() == 2){
+    }
+#ifdef ENABLE_WALLET
+    else if (params.size() == 2){
         int nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
         if(nSporkID == -1){
             return "Invalid spork name";
@@ -262,9 +265,15 @@ UniValue spork(const UniValue& params, bool fHelp)
 
     throw runtime_error(
         "spork <name> [<value>]\n"
-        "<name> is the corresponding spork name, or 'show' to show all current spork settings, active to show which sporks are active"
-        "<value> is a epoch datetime to enable or disable spork"
+        "<name> is the corresponding spork name, or 'show' to show all current spork settings, active to show which sporks are active\n"
+        "<value> is a epoch datetime to enable or disable spork\n"
         + HelpRequiringPassphrase());
+#else // ENABLE_WALLET
+    throw runtime_error(
+        "spork <name>\n"
+        "<name> is the corresponding spork name, or 'show' to show all current spork settings, active to show which sporks are active\n");
+#endif // ENABLE_WALLET
+
 }
 
 UniValue validateaddress(const UniValue& params, bool fHelp)
@@ -290,8 +299,8 @@ UniValue validateaddress(const UniValue& params, bool fHelp)
             "  \"hdchainid\" : \"<hash>\"        (string, optional) The ID of the HD chain\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("validateaddress", "\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"")
-            + HelpExampleRpc("validateaddress", "\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"")
+            + HelpExampleCli("validateaddress", "\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"")
+            + HelpExampleRpc("validateaddress", "\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"")
         );
 
 #ifdef ENABLE_WALLET
@@ -457,11 +466,11 @@ UniValue verifymessage(const UniValue& params, bool fHelp)
             "\nUnlock the wallet for 30 seconds\n"
             + HelpExampleCli("walletpassphrase", "\"mypassphrase\" 30") +
             "\nCreate the signature\n"
-            + HelpExampleCli("signmessage", "\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\" \"my message\"") +
+            + HelpExampleCli("signmessage", "\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\" \"my message\"") +
             "\nVerify the signature\n"
-            + HelpExampleCli("verifymessage", "\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\" \"signature\" \"my message\"") +
+            + HelpExampleCli("verifymessage", "\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\" \"signature\" \"my message\"") +
             "\nAs json rpc\n"
-            + HelpExampleRpc("verifymessage", "\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\", \"signature\", \"my message\"")
+            + HelpExampleRpc("verifymessage", "\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\", \"signature\", \"my message\"")
         );
 
     LOCK(cs_main);
@@ -607,8 +616,8 @@ UniValue getaddressmempool(const UniValue& params, bool fHelp)
             "  }\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("getaddressmempool", "'{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}'")
-            + HelpExampleRpc("getaddressmempool", "{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}")
+            + HelpExampleCli("getaddressmempool", "'{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}'")
+            + HelpExampleRpc("getaddressmempool", "{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}")
         );
 
     std::vector<std::pair<uint160, int> > addresses;
@@ -677,8 +686,8 @@ UniValue getaddressutxos(const UniValue& params, bool fHelp)
             "  }\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("getaddressutxos", "'{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}'")
-            + HelpExampleRpc("getaddressutxos", "{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}")
+            + HelpExampleCli("getaddressutxos", "'{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}'")
+            + HelpExampleRpc("getaddressutxos", "{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}")
         );
 
     std::vector<std::pair<uint160, int> > addresses;
@@ -746,8 +755,8 @@ UniValue getaddressdeltas(const UniValue& params, bool fHelp)
             "  }\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("getaddressdeltas", "'{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}'")
-            + HelpExampleRpc("getaddressdeltas", "{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}")
+            + HelpExampleCli("getaddressdeltas", "'{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}'")
+            + HelpExampleRpc("getaddressdeltas", "{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}")
         );
 
 
@@ -826,8 +835,8 @@ UniValue getaddressbalance(const UniValue& params, bool fHelp)
             "  \"received\"  (string) The total number of duffs received (including change)\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("getaddressbalance", "'{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}'")
-            + HelpExampleRpc("getaddressbalance", "{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}")
+            + HelpExampleCli("getaddressbalance", "'{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}'")
+            + HelpExampleRpc("getaddressbalance", "{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}")
         );
 
     std::vector<std::pair<uint160, int> > addresses;
@@ -884,8 +893,8 @@ UniValue getaddresstxids(const UniValue& params, bool fHelp)
             "  ,...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("getaddresstxids", "'{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}'")
-            + HelpExampleRpc("getaddresstxids", "{\"addresses\": [\"DRBpAdWvsLuJeM42BGbtE4CzzpkudAfafv\"]}")
+            + HelpExampleCli("getaddresstxids", "'{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}'")
+            + HelpExampleRpc("getaddresstxids", "{\"addresses\": [\"DExeHtoRwqNu2SKwmUdJSbbw4T4HYpFe8N\"]}")
         );
 
     std::vector<std::pair<uint160, int> > addresses;
