@@ -1,4 +1,4 @@
-Desire Core version 0.12.2.3
+Desire Core version 0.12.2.2
 ==========================
 
 Release is now available from:
@@ -104,7 +104,7 @@ done too.
 0.12.2.2 Change log
 ===================
 
-See detailed [change log](https://github.com/lazyboozer/Desire/tree/master/doc/release-notes/release-notes-0.12.2.3) below.
+See detailed [change log](https://github.com/lazyboozer/Desire/tree/master/doc/release-notes/release-notes-0.12.2.2) below.
 
 Backports:
 ff30aed68 Align with btc 0.12 (#1409)
