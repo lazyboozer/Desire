@@ -154,6 +154,9 @@ public:
 		vSeeds.push_back(CDNSSeedData("desire_node_9", "185.236.130.112"));
 		vSeeds.push_back(CDNSSeedData("desire_node_10", "194.87.92.16"));
 		vSeeds.push_back(CDNSSeedData("desire_node_11", "194.87.92.23"));		
+		vSeeds.push_back(CDNSSeedData("desire_node_12", "194.87.236.172"));
+		vSeeds.push_back(CDNSSeedData("desire_node_13", "194.87.237.203"));
+		vSeeds.push_back(CDNSSeedData("desire_node_14", "194.87.239.119"));
 		vSeeds.push_back(CDNSSeedData("altmix", "5.9.51.209"));		
 	    vSeeds.push_back(CDNSSeedData("unimining.net", "164.132.18.89"));
         vSeeds.push_back(CDNSSeedData("bigmine", "194.67.213.243"));
