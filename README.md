@@ -1,3 +1,7 @@
+<p align="left">
+  <img src="https://i.imgur.com/s7rXj0A.png" width="100"/>
+</p>
+
 Desire Core staging tree 0.12.2.2
 
 https://www.desire-crypto.com
