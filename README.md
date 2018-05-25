@@ -1,4 +1,4 @@
-<p align="center">
+<p align="left">
   <img src="https://i.imgur.com/s7rXj0A.png" width="100"/>
 </p>
 
@@ -31,7 +31,7 @@ Desire Specifications
 - Est. ~22M Max Coins                                             
 - Decentralized Masternode Network                                
 - Superior Transaction Anonymity using PrivateSend                
-- Mastenode reward                
+- Mastenode reward:                
 
 | Block         | Award MN           | 
 | ------------- |:------------------:| 
