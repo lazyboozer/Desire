@@ -5,9 +5,9 @@
 Desire Core staging tree 0.12.2.2
 =========================================
 
-https://www.desire-crypto.com
+[Website](https://www.desire-crypto.com/ "desire-crypto.com") [Coinmarketcap](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [Bitcoitalk] [Bitcoitalk](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [Discord](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
 
-https://bitcointalk.org/index.php?topic=2272607.0
+
 
 What is Desire?
 --------
