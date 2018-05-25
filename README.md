@@ -14,6 +14,35 @@ Desire is an experimental new digital currency that enables anonymous, instant p
 
 For more information, as well as an immediately useable, binary version of the Desire Core software, see https://bitcointalk.org/index.php?topic=2272607.0.
 
+Desire Specifications
+
+- Release date: 15/10/2017 / Premine ~ 4%
+- ASIC resistance
+- NeoScrypt hashing algorithm
+- Difficulty retargets using Dark Gravity Wave
+- CPU/GPU/ mining
+- Block reward is controlled by: 2222222/(((Difficulty+2600)/9)^2)
+- Mastenode reward: 
+
+Block    Award MN
+
+0      - 20.0%
+158000 - 25.0% 
+175280 - 30.0% 
+192560 - 35.0% 
+209840 - 37.5% 
+227120 - 40.0% 
+244400 - 42.5% 
+261680 - 45.0% 
+278960 - 47.5% 
+313520 - 50.0% 
+
+- Block generation: 2.5 minutes
+- InstantSend confirmation: ~5 seconds
+- Est. ~22M Max Coins
+- Decentralized Masternode Network
+- Superior Transaction Anonymity using PrivateSend
+
 License
 
 Desire Core is released under the terms of the MIT license. See COPYING for more information or see https://opensource.org/licenses/MIT.
