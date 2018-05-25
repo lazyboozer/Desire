@@ -1,8 +1,14 @@
 <p align="center">
   <img src="https://i.imgur.com/s7rXj0A.png" width="100"/>
+<<<<<<< HEAD
 
 [WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [DISCORD](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
 
+=======
+
+[WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [DISCORD](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
+
+>>>>>>> parent of f3adce5... Update ReadMe.md
 </p>
 
 Desire Core staging tree 0.12.2.2
