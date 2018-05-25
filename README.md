@@ -1,15 +1,11 @@
 <p align="center">
   <img src="https://i.imgur.com/s7rXj0A.png" width="100"/>
-<<<<<<< HEAD
-
-[WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [DISCORD](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
-
-=======
-
-[WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [DISCORD](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
-
->>>>>>> parent of f3adce5... Update ReadMe.md
 </p>
+
+
+[WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [DISCORD](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
+
+
 
 Desire Core staging tree 0.12.2.2
 =========================================
@@ -24,22 +20,19 @@ For more information, as well as an immediately useable, binary version of the D
 Desire Specifications
 --------
 
-| Release date: 15/10/2017 / Premine ~ 4%                         | 
-| ASIC resistance                                                 |
-| NeoScrypt hashing algorithm                                     | 
-| Difficulty retargets using Dark Gravity Wave                    | 
-| CPU/GPU/ mining                                                 |   
-| Block reward is controlled by: 2222222/(((Difficulty+2600)/9)^2)|
-| Block generation: 2.5 minutes                                   |
-| InstantSend confirmation: ~5 seconds                            |
-| Est. ~22M Max Coins                                             |
-| Decentralized Masternode Network                                |
-| Superior Transaction Anonymity using PrivateSend                |
+- Release date: 15/10/2017 / Premine ~ 4%                          
+- ASIC resistance                                                 
+- NeoScrypt hashing algorithm                                      
+- Difficulty retargets using Dark Gravity Wave                     
+- CPU/GPU/ mining                                                    
+- Block reward is controlled by: 2222222/(((Difficulty+2600)/9)^2)
+- Block generation: 2.5 minutes                                   
+- InstantSend confirmation: ~5 seconds                            
+- Est. ~22M Max Coins                                             
+- Decentralized Masternode Network                                
+- Superior Transaction Anonymity using PrivateSend                
+- Mastenode reward                
 
-
-
-|    Mastenode reward                |
-|:----------------------------------:|
 | Block         | Award MN           | 
 | ------------- |:------------------:| 
 | 0             | 20.0%              | 
