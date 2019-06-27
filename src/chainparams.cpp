@@ -143,23 +143,9 @@ public:
         assert(genesis.hashMerkleRoot == uint256S("0x39bcbfcc23807869b05730a536ca42670914a7f97ba65be68bee9766d8c50071"));
 
 
-		vSeeds.push_back(CDNSSeedData("desire_node_1", "154.16.7.228"));
-		vSeeds.push_back(CDNSSeedData("desire_node_2", "149.56.154.65"));
-		vSeeds.push_back(CDNSSeedData("desire_node_3", "154.16.7.190"));
-		vSeeds.push_back(CDNSSeedData("desire_node_4", "109.205.244.150"));
-		vSeeds.push_back(CDNSSeedData("desire_node_5", "202.5.19.121"));
-		vSeeds.push_back(CDNSSeedData("desire_node_6", "35.185.122.226"));
-		vSeeds.push_back(CDNSSeedData("desire_node_7", "35.205.214.124"));
-		vSeeds.push_back(CDNSSeedData("desire_node_8", "185.236.130.103"));
-		vSeeds.push_back(CDNSSeedData("desire_node_9", "185.236.130.112"));
-		vSeeds.push_back(CDNSSeedData("desire_node_10", "194.87.92.16"));
-		vSeeds.push_back(CDNSSeedData("desire_node_11", "194.87.92.23"));		
-		vSeeds.push_back(CDNSSeedData("desire_node_12", "194.87.236.172"));
-		vSeeds.push_back(CDNSSeedData("desire_node_13", "194.87.237.203"));
-		vSeeds.push_back(CDNSSeedData("desire_node_14", "194.87.239.119"));
-		vSeeds.push_back(CDNSSeedData("altmix", "5.9.51.209"));		
-	    vSeeds.push_back(CDNSSeedData("unimining.net", "164.132.18.89"));
-        vSeeds.push_back(CDNSSeedData("bigmine", "194.67.213.243"));
+		vSeeds.push_back(CDNSSeedData("desire_node_1", "195.133.197.201"));
+		vSeeds.push_back(CDNSSeedData("desire_node_2", "195.133.144.234"));
+		vSeeds.push_back(CDNSSeedData("desire_node_3", "195.133.145.231"));
 
 
         // Desire addresses start with 'D'
@@ -190,10 +176,9 @@ public:
 
         checkpointData = (CCheckpointData) {
             boost::assign::map_list_of
-            (  10429, uint256S("0x00000000037bd367a00790eb9eb29e120be858b0e2ed14d75f0ba9450a064786"))
-			(  50277, uint256S("0x00000000037bd367a00790eb9eb29e120be858b0e2ed14d75f0ba9450a064786")),
-            1516023591, // * UNIX timestamp of last checkpoint block
-                 74137,    // * total number of transactions between genesis and last checkpoint
+            (  338219, uint256S("0x000000002304cfc84863bf31f3a6d51aa3f281d59b4e7a8b61f9a81a58db5743")),
+            1561602678, // * UNIX timestamp of last checkpoint block
+                449015,    // * total number of transactions between genesis and last checkpoint
                         //   (the tx=... number in the SetBestChain debug.log lines)
             5000        // * estimated number of transactions per day after checkpoint
         };

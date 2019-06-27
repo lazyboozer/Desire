@@ -3,11 +3,11 @@
 </p>
 
 
-[WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") [DISCORD](https://coinmarketcap.com/currencies/desire/ "Discord Live Chat")
+[WEBSITE](https://www.desire-crypto.com/ "desire-crypto.com") [COINMARKETCAP](https://coinmarketcap.com/currencies/desire/ "CoinmarketCap") [BITCOINTALK](https://bitcointalk.org/index.php?topic=2272607.0 "Bitcoitalk Forum") 
 
 
 
-Desire Core staging tree 0.12.2.2
+Desire Core staging tree 0.12.2.3
 =========================================
 
 What is Desire?
